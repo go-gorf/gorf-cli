@@ -33,7 +33,7 @@ func (a *GorfApp) Create() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	err = os.Rename("template", a.Name)
+	err = os.Rename("template-app", a.Name)
 	if err != nil {
 		log.Fatal(err)
 	}
