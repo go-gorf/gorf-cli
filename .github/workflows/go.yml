@@ -24,11 +24,15 @@ jobs:
         go-version: 1.19
 
     - name: Build
-      run: go build -o gorf
+      run: |
+       go build -o gorf
+       pwd
+       ls
+
       
     - name: Download a Build Artifact
       uses: actions/download-artifact@v3.0.2
       with:
         name: gorf
         # Destination path
-        path: gorf
+        path: pwd
