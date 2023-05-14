@@ -12,8 +12,8 @@ import (
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "gorf-cli",
-	Short: "A commandline tool for Gorf",
-	Long: `A commandline tool for go cli
+	Short: "A commandline tool for Golang Rest Framework (Gorf)",
+	Long: `A commandline tool for Golang Rest Framework (Gorf)"
 	Example:
 
 	gorf-cli init hello
