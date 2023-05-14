@@ -4,7 +4,7 @@
 ```bash
 go install github.com/go-gorf/gorf-cli@latest
 ```
-## Create new Project  
+## Create new Project
 
 ```bash
 gorf-cli init hello

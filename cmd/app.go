@@ -28,7 +28,7 @@ type GorfApp struct {
 }
 
 func (a *GorfApp) Create() {
-	gorfTemplateUrl := "https://github.com/go-gorf/app-template.git"
+	gorfTemplateUrl := "https://github.com/go-gorf/template-app.git"
 	out, err := exec.Command("git", "clone", gorfTemplateUrl).Output()
 	if err != nil {
 		log.Fatal(err)
