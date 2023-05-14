@@ -53,5 +53,5 @@ func CreateNewGorfProject(name string) {
 	project := &Project{name}
 	project.Create()
 	fmt.Println("Successfully created project!")
-	fmt.Printf("cd %v\ngo tidy\ngorf run\n", project.Name)
+	fmt.Printf("cd %v\ngorf-cli run\n", project.Name)
 }
