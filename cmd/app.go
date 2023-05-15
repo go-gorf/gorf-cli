@@ -12,6 +12,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var appTemplateName = "template-app"
+
 // appCmd represents the app command
 var appCmd = &cobra.Command{
 	Use:   "app",
@@ -28,12 +30,12 @@ type GorfApp struct {
 }
 
 func (a *GorfApp) Create() {
-	gorfTemplateUrl := "https://github.com/go-gorf/template-app.git"
+	gorfTemplateUrl := fmt.Sprintf("https://github.com/go-gorf/%v.git", appTemplateName)
 	out, err := exec.Command("git", "clone", gorfTemplateUrl).Output()
 	if err != nil {
 		log.Fatal(err)
 	}
-	err = os.Rename("template-app", a.Name)
+	err = os.Rename(appTemplateName, a.Name)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -43,7 +45,7 @@ func (a *GorfApp) Create() {
 func CreateNewGorfApp(name string) {
 	gorfApp := &GorfApp{name}
 	gorfApp.Create()
-	fmt.Println("Successfully created new apps!")
+	fmt.Printf("Successfully created app %v :)\n", name)
 }
 
 func init() {

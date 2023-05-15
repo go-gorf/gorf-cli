@@ -18,4 +18,4 @@ CD to your apps directory
 gorf-cli app newApp
 ```
 
-Add the app to the settings.go in the project root.  
+Add the app to the settings.go in the project root.

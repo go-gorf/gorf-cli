@@ -12,6 +12,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var projectTemplateName = "template"
+
 // initCmd represents the init command
 var initCmd = &cobra.Command{
 	Use:   "init",
@@ -23,7 +25,7 @@ gorf init myproject
 `,
 	Args: cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Printf("Creating project (%v)...", args[0])
+		fmt.Printf("Creating project %v :)", args[0])
 		CreateNewGorfProject(args[0])
 	},
 }
@@ -37,12 +39,12 @@ type Project struct {
 }
 
 func (p *Project) Create() {
-	gorfTemplateUrl := "https://github.com/go-gorf/template.git"
+	gorfTemplateUrl := fmt.Sprintf("https://github.com/go-gorf/%v.git", projectTemplateName)
 	out, err := exec.Command("git", "clone", gorfTemplateUrl).Output()
 	if err != nil {
 		log.Fatal(err)
 	}
-	err = os.Rename("template", p.Name)
+	err = os.Rename(projectTemplateName, p.Name)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -53,5 +55,9 @@ func CreateNewGorfProject(name string) {
 	project := &Project{name}
 	project.Create()
 	fmt.Println("Successfully created project!")
-	fmt.Printf("cd %v\ngorf-cli run\n", project.Name)
+	fmt.Printf(`To run the project
+cd %v
+go run .
+`,
+		project.Name)
 }
