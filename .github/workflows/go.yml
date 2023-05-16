@@ -1,27 +1,53 @@
 name: Build and Release
 
-on:
-  push:
-    tags:
-      - '*'
-
-permissions:
-  contents: write
+#on:
+#  push:
+#    tags:
+#      - '*'
+#
+#permissions:
+#  contents: write
+#
+#jobs:
+#  build:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v3
+#      - name: Set up Go
+#        uses: actions/setup-go@v3
+#        with:
+#          go-version: 1.19
+#      - name: Build and package assets
+#        run: go build -o gorf
+#      - name: Release
+#        uses: softprops/action-gh-release@v0.1.15
+#        if: startsWith(github.ref, 'refs/tags/')
+#        with:
+#          files: gorf
+#
 
 jobs:
-  build:
+  goreleaser:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Set up Go
-        uses: actions/setup-go@v3
+      - uses: actions/checkout@v3
         with:
-          go-version: 1.19
-      - name: Build and package assets
-        run: go build -o gorf
-      - name: Release
-        uses: softprops/action-gh-release@v0.1.15
-        if: startsWith(github.ref, 'refs/tags/')
+          fetch-depth: 0
+      - run: git fetch --force --tags
+      - uses: actions/setup-go@v4
         with:
-          files: gorf
+          go-version: stable
+      # More assembly might be required: Docker logins, GPG, etc. It all depends
+      # on your needs.
+      - uses: goreleaser/goreleaser-action@v4
+        with:
+          # either 'goreleaser' (default) or 'goreleaser-pro':
+          distribution: goreleaser
+          version: latest
+          args: release --clean
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Your GoReleaser Pro key, if you are using the 'goreleaser-pro'
+          # distribution:
+          # GORELEASER_KEY: ${{ secrets.GORELEASER_KEY }}
