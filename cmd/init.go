@@ -5,11 +5,10 @@ package cmd
 
 import (
 	"fmt"
-	"log"
-	"os"
-	"os/exec"
-
 	"github.com/spf13/cobra"
+	"io"
+	"net/http"
+	"os"
 )
 
 var projectTemplateName = "template"
@@ -39,16 +38,28 @@ type Project struct {
 }
 
 func (p *Project) Create() {
-	gorfTemplateUrl := fmt.Sprintf("https://github.com/go-gorf/%v.git", projectTemplateName)
-	out, err := exec.Command("git", "clone", gorfTemplateUrl).Output()
+	specUrl := "https://github.com/go-gorf/template/archive/refs/heads/main.zip"
+	resp, err := http.Get(specUrl)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Printf("err: %s", err)
 	}
-	err = os.Rename(projectTemplateName, p.Name)
+
+	defer resp.Body.Close()
+	fmt.Println("status", resp.Status)
+	if resp.StatusCode != 200 {
+		return
+	}
+
+	// Create the file
+	out, err := os.Create(fmt.Sprintf("%s.zip", p.Name))
 	if err != nil {
-		log.Fatal(err)
+		fmt.Printf("err: %s", err)
 	}
-	fmt.Println(string(out))
+	defer out.Close()
+
+	// Write the body to file
+	_, err = io.Copy(out, resp.Body)
+	fmt.Printf("err: %s", err)
 }
 
 func CreateNewGorfProject(name string) {
